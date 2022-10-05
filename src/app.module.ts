@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './controllers/products/products.controller';
+import { ProductsController } from './products/controllers/products/products.controller';
 import { UsersController } from './controllers/users/users.controller';
 import { CategoriesController } from './controllers/categories/categories.controller';
 import { OrdersController } from './controllers/orders/orders.controller';
@@ -9,9 +9,11 @@ import { CustomersController } from './controllers/customers/customers.controlle
 import { BrandsController } from './controllers/brands/brands.controller';
 import { ProductsService } from './services/products/products.service';
 import { UsersService } from './services/users/users.service';
+import { ProductsModule } from './products/products.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [],
+  imports: [ProductsModule, UsersModule],
   providers: [AppService, ProductsService, UsersService],
   controllers: [
     ProductsController,
