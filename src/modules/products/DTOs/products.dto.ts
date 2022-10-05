@@ -8,7 +8,9 @@ import {
 
 import { PartialType, OmitType } from '@nestjs/mapped-types';
 
-//Product dto
+//Dto's will define how we want the clients must send the info.
+
+//Product dto.
 export class Product {
   @IsNotEmpty()
   @IsString()
