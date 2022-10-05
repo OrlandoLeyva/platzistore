@@ -11,7 +11,6 @@ import { responses } from 'src/utils/response.handler';
 export class ParseIntPipe implements PipeTransform {
   transform(value: string, metadata: ArgumentMetadata) {
     const number = Number(value);
-    console.log(number);
     if (isNaN(number))
       throw new HttpException(
         responses.error(400, 'BadRequest: id must be an Number'),

@@ -1,3 +1,9 @@
+//TODO: CRUD
+//Create: DONE.
+//Read: DONE.
+//Update: DONE.
+//Delete: DONE.
+
 import {
   Body,
   Controller,
@@ -9,6 +15,7 @@ import {
 } from '@nestjs/common';
 import {
   CreateProductDto,
+  Product,
   UpdateProductDto,
 } from 'src/schemas/products.schema';
 
@@ -20,38 +27,32 @@ import { ParseIntPipe } from 'src/common/parse-int.pipe';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
-  //Get all the products.
-  @Get()
-  getAll() {
-    try {
-      const products = this.productsService.findAll();
-      return {
-        statusCode: '200',
-        message: 'OK',
-        data: products,
-      };
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  //Get a single products.
-  @Get('/:id')
-  //ParseIntPipe: will validate if the param if a number, not type number, just a number and then if it is, will convert it into a type number. I doesn't accept decimals.
-  getOne(@Param('id', ParseIntPipe) productId: number) {
-    try {
-      const product: object = this.productsService.findOne(productId);
-      return responses.success(200, 'OK', product);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   @Post()
   create(@Body() body: CreateProductDto) {
     try {
       const newProduct = this.productsService.create(body);
       return responses.success(201, 'Created', newProduct);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get()
+  getAll() {
+    try {
+      const products = this.productsService.findAll();
+      return responses.success(200, 'OK', products);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('/:id')
+  //ParseIntPipe: will validate if the param if a number, not type number, just a number and then if it is, will convert it into a type number. It doesn't accept decimals. MY pipe does accept decimals.
+  getOne(@Param('id', ParseIntPipe) productId: number) {
+    try {
+      const product: Product = this.productsService.findOne(productId);
+      return responses.success(200, 'OK', product);
     } catch (error) {
       throw error;
     }
@@ -71,10 +72,10 @@ export class ProductsController {
   }
 
   @Delete('/:id')
-  remove(@Param('id', ParseIntPipe) productId: any) {
+  remove(@Param('id', ParseIntPipe) productId: number) {
     try {
-      const deletedProduct = this.productsService.remove(productId);
-      return responses.success(200, 'OK', deletedProduct);
+      this.productsService.remove(productId);
+      return responses.success(200, 'OK', null);
     } catch (error) {
       throw error;
     }

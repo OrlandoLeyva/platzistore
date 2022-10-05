@@ -1,37 +1,48 @@
-import { IsString, IsNumber } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsNotEmpty,
+  IsPositive,
+  IsInt,
+} from 'class-validator';
 
-// export interface Product {
-//   @IsString()
-//   id: number;
-//   name: string;
-//   description: string;
-//   price: number;
-//   image: string;
-//   stock: number;
-// }
+import { PartialType, OmitType } from '@nestjs/mapped-types';
 
-//Product dto.
-
+//Product dto
 export class Product {
+  @IsNotEmpty()
+  @IsString()
+  @IsPositive()
+  @IsInt()
   id: number;
 
+  @IsNotEmpty()
   @IsString()
   name: string;
 
+  @IsNotEmpty()
   @IsString()
   description: string;
 
+  @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   price: number;
 
+  @IsNotEmpty()
   @IsString()
   image: string;
 
+  @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
+  @IsInt()
   stock: number;
 }
 
-export type CreateProductDto = Omit<Product, 'id'>;
+export class CreateProductDto extends OmitType(Product, ['id']) {}
+export class UpdateProductDto extends PartialType(OmitType(Product, ['id'])) {}
 
-export type UpdateProductDto = Omit<Product, 'id'>;
+// export type CreateProductDto = Readonly<Omit<Product, 'id'>>;
 
+// export type UpdateProductDto = Partial<Omit<Product, 'id'>>;

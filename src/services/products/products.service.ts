@@ -27,6 +27,15 @@ export class ProductsService {
     },
   ];
 
+  create(payload: CreateProductDto): Product {
+    const product: Product = {
+      id: Math.floor(Math.random() * (1000 - 1) + 1),
+      ...payload,
+    };
+    this.products.push(product);
+    return product;
+  }
+
   findAll() {
     return this.products;
   }
@@ -43,22 +52,13 @@ export class ProductsService {
     return product;
   }
 
-  create(payload: CreateProductDto): Product {
-    const product: Product = {
-      id: Math.floor(Math.random() * (1000 - 1) + 1),
-      ...payload,
-    };
-    this.products.push(product);
-    return product;
-  }
-
   update(id: number, payload: UpdateProductDto): Product {
     const productIndex = this.products.findIndex(
       (product) => product.id === id,
     );
     if (productIndex === -1)
       throw new HttpException(
-        responses.error(404, 'Not found'),
+        responses.error(404, 'Product Not Found'),
         HttpStatus.NOT_FOUND,
       );
     this.products[productIndex] = {
@@ -75,7 +75,7 @@ export class ProductsService {
     );
     if (productIndex === -1)
       throw new HttpException(
-        responses.error(404, 'Not Found'),
+        responses.error(404, 'Product Not Found'),
         HttpStatus.NOT_FOUND,
       );
     this.products.splice(productIndex, 1);
