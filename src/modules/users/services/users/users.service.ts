@@ -1,13 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ProductsService } from 'src/modules/products/services/products/products.service';
 import {
   CreateUserDto,
   UpdateUserDto,
   UserDto,
-} from 'src/modules/users/DTOs/users.schema';
+} from 'src/modules/users/DTOs/users.dto';
+
 import { responses } from 'src/utils/response.handler';
+import { Order } from '../../entities/order.entity';
 
 @Injectable()
 export class UsersService {
+  constructor(private productsServices: ProductsService) {}
+
   private users: UserDto[] = [
     {
       id: Math.floor(Math.random() * (1000 - 1) + 1),
@@ -19,7 +24,7 @@ export class UsersService {
       },
     },
     {
-      id: Math.floor(Math.random() * (1000 - 1) + 1),
+      id: 1,
       name: 'jorge',
       lastName: 'almada',
       login: {
@@ -92,4 +97,14 @@ export class UsersService {
       throw error;
     }
   }
+
+  // getUserOrders(id: number): Order[] {
+  //   try {
+  //     this.findOne(id);
+  //     const orders = this.ordersService.findByUser(id);
+  //     return orders;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

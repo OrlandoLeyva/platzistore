@@ -1,9 +1,3 @@
-//TODO: CRUD
-//Create: in progress...
-//Read: Pending.
-//Update: Pending.
-//Delete: Pending.
-
 import {
   Body,
   Controller,
@@ -18,7 +12,7 @@ import {
   CreateUserDto,
   LoginDto,
   UpdateUserDto,
-} from 'src/modules/users/DTOs/users.schema';
+} from 'src/modules/users/DTOs/users.dto';
 import { UsersService } from 'src/modules/users/services/users/users.service';
 import { responses } from 'src/utils/response.handler';
 
@@ -51,6 +45,16 @@ export class UsersController {
     try {
       const user = this.usersService.findOne(userId);
       return responses.success(200, 'OK', user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('/:id/orders')
+  geOrders(@Param('id', ParseIntPipe) userId) {
+    try {
+      // const orders = this.usersService.getUserOrders(userId);
+      // return responses.success(200, 'OK', orders);
     } catch (error) {
       throw error;
     }

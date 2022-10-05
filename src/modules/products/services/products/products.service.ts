@@ -10,7 +10,7 @@ import { responses } from 'src/utils/response.handler';
 export class ProductsService {
   private products: Product[] = [
     {
-      id: Math.floor(Math.random() * (1000 - 1) + 1),
+      id: 1,
       name: 'Product 1',
       description: 'bla bla',
       price: 122,
@@ -50,6 +50,21 @@ export class ProductsService {
       );
 
     return product;
+  }
+
+  filterById(productsId: number[]): Product[] {
+    try {
+      let products: Product[];
+
+      for (const id of productsId) {
+        const product = this.findOne(id);
+        products.push(product);
+      }
+
+      return products;
+    } catch (error) {
+      throw error;
+    }
   }
 
   update(id: number, payload: UpdateProductDto): Product {
