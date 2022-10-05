@@ -1,4 +1,4 @@
-import { ErrorResponse, SuccessResponse } from 'src/schemas/responses.schema';
+import { ErrorResponse, SuccessResponse } from 'src/interfaces/http-responses';
 
 // interface Responses {
 //   success: Function;

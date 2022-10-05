@@ -17,9 +17,9 @@ import {
   CreateProductDto,
   Product,
   UpdateProductDto,
-} from 'src/schemas/products.schema';
+} from 'src/modules/products/DTOs/products.dto';
 
-import { ProductsService } from 'src/services/products/products.service';
+import { ProductsService } from 'src/modules/products/services/products/products.service';
 import { responses } from 'src/utils/response.handler';
 import { ParseIntPipe } from 'src/common/parse-int.pipe';
 

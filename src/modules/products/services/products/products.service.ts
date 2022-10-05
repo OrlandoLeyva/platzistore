@@ -3,7 +3,7 @@ import {
   CreateProductDto,
   Product,
   UpdateProductDto,
-} from 'src/schemas/products.schema';
+} from 'src/modules/products/DTOs/products.dto';
 import { responses } from 'src/utils/response.handler';
 
 @Injectable()

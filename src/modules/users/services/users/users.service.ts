@@ -3,7 +3,7 @@ import {
   CreateUserDto,
   UpdateUserDto,
   UserDto,
-} from 'src/schemas/users.schema';
+} from 'src/modules/users/DTOs/users.schema';
 import { responses } from 'src/utils/response.handler';
 
 @Injectable()

@@ -18,8 +18,8 @@ import {
   CreateUserDto,
   LoginDto,
   UpdateUserDto,
-} from 'src/schemas/users.schema';
-import { UsersService } from 'src/services/users/users.service';
+} from 'src/modules/users/DTOs/users.schema';
+import { UsersService } from 'src/modules/users/services/users/users.service';
 import { responses } from 'src/utils/response.handler';
 
 @Controller('users')
