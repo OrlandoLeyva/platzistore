@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ParseIntPipe } from 'src/common/parse-int.pipe';
 import {
   CreateUserDto,
@@ -16,6 +17,7 @@ import {
 import { UsersService } from 'src/modules/users/services/users/users.service';
 import { responses } from 'src/utils/response.handler';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -53,8 +55,8 @@ export class UsersController {
   @Get('/:id/orders')
   geOrders(@Param('id', ParseIntPipe) userId) {
     try {
-      // const orders = this.usersService.getUserOrders(userId);
-      // return responses.success(200, 'OK', orders);
+      const orders = this.usersService.getUserOrders(userId);
+      return responses.success(200, 'OK', orders);
     } catch (error) {
       throw error;
     }

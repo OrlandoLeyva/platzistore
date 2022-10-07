@@ -22,11 +22,15 @@ import {
 import { ProductsService } from 'src/modules/products/services/products/products.service';
 import { responses } from 'src/utils/response.handler';
 import { ParseIntPipe } from 'src/common/parse-int.pipe';
+import { ApiTags, ApiParam, ApiOperation } from '@nestjs/swagger';
+import { string } from 'joi';
 
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
+  @ApiOperation({ summary: 'Add a new product' })
   @Post()
   create(@Body() body: CreateProductDto) {
     try {

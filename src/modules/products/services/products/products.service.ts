@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { DatabaseService } from 'src/modules/database/services/database.service';
 import {
   CreateProductDto,
   Product,
@@ -8,6 +9,8 @@ import { responses } from 'src/utils/response.handler';
 
 @Injectable()
 export class ProductsService {
+  constructor(private databaseService: DatabaseService) {}
+
   private products: Product[] = [
     {
       id: 1,
@@ -18,7 +21,7 @@ export class ProductsService {
       stock: 12,
     },
     {
-      id: Math.floor(Math.random() * (1000 - 1) + 1),
+      id: 2,
       name: 'Product 2',
       description: 'bla bla',
       price: 123,
@@ -41,11 +44,13 @@ export class ProductsService {
   }
 
   findOne(id: number): Product {
-    const product: Product = this.products.find((product) => product.id === id);
+    const product: Product | undefined = this.products.find(
+      (product) => product.id === id,
+    );
 
     if (!product)
       throw new HttpException(
-        responses.error(404, 'NotFound'),
+        responses.error(404, `Product ${id} not found`),
         HttpStatus.NOT_FOUND,
       );
 
@@ -54,11 +59,14 @@ export class ProductsService {
 
   filterById(productsId: number[]): Product[] {
     try {
-      let products: Product[];
-
+      const products: Product[] = [];
       for (const id of productsId) {
-        const product = this.findOne(id);
-        products.push(product);
+        try {
+          const product = this.findOne(id);
+          products.push(product);
+        } catch (error) {
+          throw error;
+        }
       }
 
       return products;

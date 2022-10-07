@@ -1,5 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ProductsService } from 'src/modules/products/services/products/products.service';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
+
+import { ConfigType } from '@nestjs/config';
+
 import {
   CreateUserDto,
   UpdateUserDto,
@@ -8,10 +16,17 @@ import {
 
 import { responses } from 'src/utils/response.handler';
 import { Order } from '../../entities/order.entity';
+import { OrdersService } from '../orders/orders.service';
+import env from 'src/config';
 
 @Injectable()
 export class UsersService {
-  constructor(private productsServices: ProductsService) {}
+  constructor(
+    @Inject(forwardRef(() => OrdersService))
+    private ordersService: OrdersService,
+    @Inject(env.KEY)
+    private configService: ConfigType<typeof env>,
+  ) {}
 
   private users: UserDto[] = [
     {
@@ -45,6 +60,9 @@ export class UsersService {
 
   findAll(): UserDto[] {
     try {
+      //you can type using <>.
+      console.log('DB', this.configService.database.name);
+
       const users = this.users;
       return users;
     } catch (error) {
@@ -98,13 +116,13 @@ export class UsersService {
     }
   }
 
-  // getUserOrders(id: number): Order[] {
-  //   try {
-  //     this.findOne(id);
-  //     const orders = this.ordersService.findByUser(id);
-  //     return orders;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+  getUserOrders(id: number): Order[] {
+    try {
+      this.findOne(id);
+      const orders = this.ordersService.findByUser(id);
+      return orders;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

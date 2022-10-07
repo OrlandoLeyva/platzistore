@@ -6,7 +6,7 @@ import {
   IsInt,
 } from 'class-validator';
 
-import { PartialType, OmitType } from '@nestjs/mapped-types';
+import { PartialType, OmitType } from '@nestjs/swagger';
 
 //Dto's will define how we want the clients must send the info.
 
