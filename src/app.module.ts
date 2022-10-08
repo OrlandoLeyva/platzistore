@@ -28,7 +28,6 @@ const API_KEY = '123-x$%dy-34$%ds-sfs?f$?¡sa';
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('prod', 'stag', 'dev').optional(),
         DATABASE_NAME: Joi.string().required(),
-        API_KEY: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
     }),
