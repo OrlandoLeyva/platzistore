@@ -18,6 +18,7 @@ import { responses } from 'src/utils/response.handler';
 import { Order } from '../../entities/order.entity';
 import { OrdersService } from '../orders/orders.service';
 import env from 'src/config';
+import { Client } from 'pg';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +27,7 @@ export class UsersService {
     private ordersService: OrdersService,
     @Inject(env.KEY)
     private configService: ConfigType<typeof env>,
+    @Inject('DB') private db: Client,
   ) {}
 
   private users: UserDto[] = [
@@ -58,10 +60,12 @@ export class UsersService {
     return user;
   }
 
-  findAll(): UserDto[] {
+  async findAll(): Promise<UserDto[]> {
     try {
       //you can type using <>.
-      console.log('DB', this.configService.database.name);
+
+      const usersDB = await this.db.query('select * from users');
+      console.log(usersDB.rows);
 
       const users = this.users;
       return users;

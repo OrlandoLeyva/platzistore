@@ -2,14 +2,19 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/modules/database/services/database.service';
 import {
   CreateProductDto,
-  Product,
   UpdateProductDto,
 } from 'src/modules/products/DTOs/products.dto';
 import { responses } from 'src/utils/response.handler';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from '../../entities/product.entity';
 
 @Injectable()
 export class ProductsService {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(
+    private databaseService: DatabaseService,
+    @InjectRepository(Product) private productRepo: Repository<Product>,
+  ) {}
 
   private products: Product[] = [
     {
@@ -29,6 +34,11 @@ export class ProductsService {
       stock: 10,
     },
   ];
+
+  async findWithRepo() {
+    const products = await this.productRepo.find();
+    return products;
+  }
 
   create(payload: CreateProductDto): Product {
     const product: Product = {

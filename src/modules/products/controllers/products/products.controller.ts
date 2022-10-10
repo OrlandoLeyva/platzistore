@@ -42,9 +42,9 @@ export class ProductsController {
   }
 
   @Get()
-  getAll() {
+  async getAll() {
     try {
-      const products = this.productsService.findAll();
+      const products = await this.productsService.findWithRepo();
       return responses.success(200, 'OK', products);
     } catch (error) {
       throw error;

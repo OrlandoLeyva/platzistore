@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Inject, Module } from '@nestjs/common';
 import { HttpModule, HttpService } from '@nestjs/axios';
 //The firstValueFrom will resolve a Promise with the first value that was emitted from the Observable and will immediately unsubscribe to retain resources
 import { firstValueFrom } from 'rxjs';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigType } from '@nestjs/config';
 import * as Joi from 'joi';
 
 import { AppController } from './app.controller';
@@ -26,9 +26,11 @@ const API_KEY = '123-x$%dy-34$%ds-sfs?f$?¡sa';
       isGlobal: true,
       load: [config],
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('prod', 'stag', 'dev').optional(),
-        DATABASE_NAME: Joi.string().required(),
-        PORT: Joi.number().required(),
+        DB_HOST: Joi.string().required(),
+        DB_PORT: Joi.number().required(),
+        DB_NAME: Joi.string().required(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
       }),
     }),
   ],
