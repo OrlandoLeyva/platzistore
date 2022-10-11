@@ -16,31 +16,26 @@ export class ProductsService {
     @InjectRepository(Product) private productRepo: Repository<Product>,
   ) {}
 
-  private products: Product[] = [
-    {
-      id: 1,
-      name: 'Product 1',
-      description: 'bla bla',
-      price: 122,
-      image: '',
-      stock: 12,
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      description: 'bla bla',
-      price: 123,
-      image: '',
-      stock: 10,
-    },
-  ];
-
-  async findWithRepo() {
-    const products = await this.productRepo.find();
-    return products;
+  async create(payload: CreateProductDto): Promise<Product> {
+    try {
+      const newProduct = this.productRepo.create(payload);
+      await this.productRepo.save(newProduct);
+      return newProduct;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async findByIdWithRepo(id: number): Promise<Product> {
+  async findAll() {
+    try {
+      const products = await this.productRepo.find();
+      return products;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findById(id: number): Promise<Product> {
     try {
       const product = await this.productRepo.findOneBy({ id });
       if (!product)
@@ -54,39 +49,12 @@ export class ProductsService {
     }
   }
 
-  create(payload: CreateProductDto): Product {
-    const product: Product = {
-      id: Math.floor(Math.random() * (1000 - 1) + 1),
-      ...payload,
-    };
-    this.products.push(product);
-    return product;
-  }
-
-  findAll() {
-    return this.products;
-  }
-
-  findOne(id: number): Product {
-    const product: Product | undefined = this.products.find(
-      (product) => product.id === id,
-    );
-
-    if (!product)
-      throw new HttpException(
-        responses.error(404, `Product ${id} not found`),
-        HttpStatus.NOT_FOUND,
-      );
-
-    return product;
-  }
-
-  filterById(productsId: number[]): Product[] {
+  async filterById(productsId: number[]): Promise<Product[]> {
     try {
       const products: Product[] = [];
       for (const id of productsId) {
         try {
-          const product = this.findOne(id);
+          const product = await this.findById(id);
           products.push(product);
         } catch (error) {
           throw error;
@@ -99,33 +67,23 @@ export class ProductsService {
     }
   }
 
-  update(id: number, payload: UpdateProductDto): Product {
-    const productIndex = this.products.findIndex(
-      (product) => product.id === id,
-    );
-    if (productIndex === -1)
-      throw new HttpException(
-        responses.error(404, 'Product Not Found'),
-        HttpStatus.NOT_FOUND,
-      );
-    this.products[productIndex] = {
-      ...this.products[productIndex],
-      ...payload,
-    };
-
-    return this.products[productIndex];
+  async update(id: number, changes: UpdateProductDto): Promise<Product> {
+    try {
+      const product = await this.findById(id);
+      this.productRepo.merge(product, changes);
+      await this.productRepo.save(product);
+      return product;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    const productIndex = this.products.findIndex(
-      (product) => product.id === id,
-    );
-    if (productIndex === -1)
-      throw new HttpException(
-        responses.error(404, 'Product Not Found'),
-        HttpStatus.NOT_FOUND,
-      );
-    this.products.splice(productIndex, 1);
-    return this.products[productIndex];
+  async remove(id: number) {
+    try {
+      await this.findById(id);
+      this.productRepo.delete(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }

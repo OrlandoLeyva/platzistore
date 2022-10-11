@@ -16,10 +16,10 @@ export class OrdersService {
 
   private orders: Order[] = [];
 
-  create(order: CreateOrderDto): Order {
+  async create(order: CreateOrderDto) {
     const { productsId, userId } = order;
     const user = this.usersService.findOne(userId);
-    const products = this.productsService.filterById(productsId);
+    const products = await this.productsService.filterById(productsId);
     delete user.login;
     const newOrder: Order = {
       id: Math.floor(Math.random() * (1000 - 1) + 1),

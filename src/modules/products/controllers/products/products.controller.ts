@@ -32,9 +32,9 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Add a new product' })
   @Post()
-  create(@Body() body: CreateProductDto) {
+  async create(@Body() body: CreateProductDto) {
     try {
-      const newProduct = this.productsService.create(body);
+      const newProduct = await this.productsService.create(body);
       return responses.success(201, 'Created', newProduct);
     } catch (error) {
       throw error;
@@ -44,7 +44,7 @@ export class ProductsController {
   @Get()
   async getAll() {
     try {
-      const products = await this.productsService.findWithRepo();
+      const products = await this.productsService.findAll();
       return responses.success(200, 'OK', products);
     } catch (error) {
       throw error;
@@ -55,9 +55,7 @@ export class ProductsController {
   //ParseIntPipe: will validate if the param if a number, not type number, just a number and then if it is, will convert it into a type number. It doesn't accept decimals. MY pipe does accept decimals.
   async getOne(@Param('id', ParseIntPipe) productId: number) {
     try {
-      const product: Product = await this.productsService.findByIdWithRepo(
-        productId,
-      );
+      const product: Product = await this.productsService.findById(productId);
       return responses.success(200, 'OK', product);
     } catch (error) {
       throw error;
@@ -65,12 +63,15 @@ export class ProductsController {
   }
 
   @Patch('/:id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) productId: number,
     @Body() changes: UpdateProductDto,
   ) {
     try {
-      const updatedProduct = this.productsService.update(productId, changes);
+      const updatedProduct = await this.productsService.update(
+        productId,
+        changes,
+      );
       return responses.success(201, 'Created', updatedProduct);
     } catch (error) {
       throw error;
@@ -78,9 +79,9 @@ export class ProductsController {
   }
 
   @Delete('/:id')
-  remove(@Param('id', ParseIntPipe) productId: number) {
+  async remove(@Param('id', ParseIntPipe) productId: number) {
     try {
-      this.productsService.remove(productId);
+      await this.productsService.remove(productId);
       return responses.success(200, 'OK', null);
     } catch (error) {
       throw error;
