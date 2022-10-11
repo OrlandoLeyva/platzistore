@@ -53,9 +53,11 @@ export class ProductsController {
 
   @Get('/:id')
   //ParseIntPipe: will validate if the param if a number, not type number, just a number and then if it is, will convert it into a type number. It doesn't accept decimals. MY pipe does accept decimals.
-  getOne(@Param('id', ParseIntPipe) productId: number) {
+  async getOne(@Param('id', ParseIntPipe) productId: number) {
     try {
-      const product: Product = this.productsService.findOne(productId);
+      const product: Product = await this.productsService.findByIdWithRepo(
+        productId,
+      );
       return responses.success(200, 'OK', product);
     } catch (error) {
       throw error;

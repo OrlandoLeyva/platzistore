@@ -40,6 +40,20 @@ export class ProductsService {
     return products;
   }
 
+  async findByIdWithRepo(id: number): Promise<Product> {
+    try {
+      const product = await this.productRepo.findOneBy({ id });
+      if (!product)
+        throw new HttpException(
+          responses.error(404, 'Product not found'),
+          HttpStatus.NOT_FOUND,
+        );
+      return product;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   create(payload: CreateProductDto): Product {
     const product: Product = {
       id: Math.floor(Math.random() * (1000 - 1) + 1),
