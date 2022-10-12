@@ -3,6 +3,7 @@
         "Dto's",
         "DTOs",
         "platzistore",
+        "timestamptz",
         "typeorm"
     ]
 }
