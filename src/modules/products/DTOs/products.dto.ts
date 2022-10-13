@@ -6,45 +6,41 @@ import {
   IsInt,
 } from 'class-validator';
 
-import { PartialType, OmitType } from '@nestjs/swagger';
+import { PartialType, OmitType, ApiProperty } from '@nestjs/swagger';
 
-//Dto's will define how we want the clients must send the info.
-
-//Product dto.
-export class Product {
-  @IsNotEmpty()
-  @IsString()
-  @IsPositive()
-  @IsInt()
-  id: number;
-
+export class ProductDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   name: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   description: string;
 
+  @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   @IsPositive()
   price: number;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   image: string;
 
+  @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
   @IsInt()
+  @IsPositive()
   stock: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsInt()
+  @IsPositive()
+  brandId: number;
 }
 
-export class CreateProductDto extends OmitType(Product, ['id']) {}
-export class UpdateProductDto extends PartialType(OmitType(Product, ['id'])) {}
-
-// export type CreateProductDto = Readonly<Omit<Product, 'id'>>;
-
-// export type UpdateProductDto = Partial<Omit<Product, 'id'>>;
+export class UpdateProductDto extends PartialType(ProductDto) {}

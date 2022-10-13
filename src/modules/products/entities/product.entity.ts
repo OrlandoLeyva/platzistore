@@ -33,8 +33,8 @@ export class Product {
   @Column({ type: 'int', nullable: false })
   stock: number;
 
-  @Column({ type: 'varchar', unique: false, nullable: true })
-  owner: 'string';
+  // @Column({ type: 'varchar', unique: false, nullable: true })
+  // owner: 'string';
 
   @CreateDateColumn({
     type: 'timestamptz',

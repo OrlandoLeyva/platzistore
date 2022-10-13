@@ -1,24 +1,29 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/modules/database/services/database.service';
 import {
-  CreateProductDto,
+  ProductDto,
   UpdateProductDto,
 } from 'src/modules/products/DTOs/products.dto';
 import { responses } from 'src/utils/response.handler';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../../entities/product.entity';
+import { BrandsService } from '../brands/brands.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private databaseService: DatabaseService,
+    private brandsService: BrandsService,
     @InjectRepository(Product) private productRepo: Repository<Product>,
   ) {}
 
-  async create(payload: CreateProductDto): Promise<Product> {
+  async create(data: ProductDto) {
     try {
-      const newProduct = this.productRepo.create(payload);
+      const brand = await this.brandsService.findById(data.brandId);
+
+      const newProduct = this.productRepo.create(data);
+      newProduct.brand = brand;
       await this.productRepo.save(newProduct);
       return newProduct;
     } catch (error) {
@@ -67,7 +72,7 @@ export class ProductsService {
     }
   }
 
-  async update(id: number, changes: UpdateProductDto): Promise<Product> {
+  async update(id: number, changes: UpdateProductDto) {
     try {
       const product = await this.findById(id);
       this.productRepo.merge(product, changes);

@@ -14,8 +14,7 @@ import {
   Post,
 } from '@nestjs/common';
 import {
-  CreateProductDto,
-  Product,
+  ProductDto,
   UpdateProductDto,
 } from 'src/modules/products/DTOs/products.dto';
 
@@ -23,7 +22,6 @@ import { ProductsService } from 'src/modules/products/services/products/products
 import { responses } from 'src/utils/response.handler';
 import { ParseIntPipe } from 'src/common/parse-int.pipe';
 import { ApiTags, ApiParam, ApiOperation } from '@nestjs/swagger';
-import { string } from 'joi';
 
 @ApiTags('products')
 @Controller('products')
@@ -32,7 +30,7 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Add a new product' })
   @Post()
-  async create(@Body() body: CreateProductDto) {
+  async create(@Body() body: ProductDto) {
     try {
       const newProduct = await this.productsService.create(body);
       return responses.success(201, 'Created', newProduct);
@@ -55,7 +53,7 @@ export class ProductsController {
   //ParseIntPipe: will validate if the param if a number, not type number, just a number and then if it is, will convert it into a type number. It doesn't accept decimals. MY pipe does accept decimals.
   async getOne(@Param('id', ParseIntPipe) productId: number) {
     try {
-      const product: Product = await this.productsService.findById(productId);
+      const product = await this.productsService.findById(productId);
       return responses.success(200, 'OK', product);
     } catch (error) {
       throw error;
