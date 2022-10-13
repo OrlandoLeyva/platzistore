@@ -7,13 +7,13 @@ import { OrdersService } from '../../services/orders/orders.service';
 export class OrdersController {
   constructor(private ordersService: OrdersService) {}
 
-  @Post()
-  create(@Body() order: CreateOrderDto) {
-    try {
-      const newOrder = this.ordersService.create(order);
-      return responses.success(201, 'Created', newOrder);
-    } catch (error) {
-      throw error;
-    }
-  }
+  // @Post()
+  // create(@Body() order: CreateOrderDto) {
+  //   try {
+  //     const newOrder = this.ordersService.create(order);
+  //     return responses.success(201, 'Created', newOrder);
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

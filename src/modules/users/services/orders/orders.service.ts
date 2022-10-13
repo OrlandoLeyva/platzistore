@@ -16,20 +16,20 @@ export class OrdersService {
 
   private orders: Order[] = [];
 
-  async create(order: CreateOrderDto) {
-    const { productsId, userId } = order;
-    const user = this.usersService.findOne(userId);
-    const products = await this.productsService.filterById(productsId);
-    delete user.login;
-    const newOrder: Order = {
-      id: Math.floor(Math.random() * (1000 - 1) + 1),
-      customer: user,
-      products,
-      date: new Date(),
-    };
-    this.orders.push(newOrder);
-    return newOrder;
-  }
+  // async create(order: CreateOrderDto) {
+  //   const { productsId, userId } = order;
+  //   const user = this.usersService.findOne(userId);
+  //   const products = await this.productsService.filterById(productsId);
+  //   delete user.login;
+  //   const newOrder: Order = {
+  //     id: Math.floor(Math.random() * (1000 - 1) + 1),
+  //     customer: user,
+  //     products,
+  //     date: new Date(),
+  //   };
+  //   this.orders.push(newOrder);
+  //   return newOrder;
+  // }
 
   findByUser(id: number) {
     try {

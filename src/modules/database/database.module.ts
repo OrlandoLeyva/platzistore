@@ -43,7 +43,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             console.log('[DB connection error]', error);
             process.exit(-1);
           }
-          console.log('Successful DB connection');
         });
 
         return client;
