@@ -4,7 +4,11 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Brand } from './brand.entity';
 
 //TODO: add the brand
 
@@ -43,4 +47,8 @@ export class Product {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  //In the second argument we are indicating in which attribute is the relationship.
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand: Brand;
 }
