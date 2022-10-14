@@ -7,8 +7,11 @@ import {
   OneToMany,
   JoinColumn,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Brand } from './brand.entity';
+import { Category } from './category.entity';
 
 //TODO: add the brand
 
@@ -51,4 +54,8 @@ export class Product {
   //In the second argument we are indicating in which attribute is the relationship.
   @ManyToOne(() => Brand, (brand) => brand.products)
   brand: Brand;
+
+  @ManyToMany(() => Category, (category) => category.products)
+  @JoinTable()
+  categories: Category[];
 }
