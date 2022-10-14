@@ -4,9 +4,11 @@ import {
   IsNotEmpty,
   IsPositive,
   IsInt,
+  IsArray,
+  ArrayNotEmpty,
 } from 'class-validator';
 
-import { PartialType, OmitType, ApiProperty } from '@nestjs/swagger';
+import { PartialType, ApiProperty } from '@nestjs/swagger';
 
 export class ProductDto {
   @ApiProperty()
@@ -41,6 +43,15 @@ export class ProductDto {
   @IsInt()
   @IsPositive()
   brandId: number;
+
+  @ApiProperty()
+  @IsNotEmpty({ message: 'categoriesId property should not be empty' })
+  @IsArray({ message: 'categoriesId should be an array' })
+  @ArrayNotEmpty({
+    message: 'categoriesIds should contain at least one categoryId',
+  })
+  @IsNumber({}, { each: true, message: 'categoryId should be a number' })
+  categoriesIds: number[];
 }
 
 export class UpdateProductDto extends PartialType(ProductDto) {}

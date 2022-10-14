@@ -9,21 +9,28 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../../entities/product.entity';
 import { BrandsService } from '../brands/brands.service';
+import { Category } from '../../entities/category.entity';
+import { CategoriesService } from '../categories/categories.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private databaseService: DatabaseService,
     private brandsService: BrandsService,
+    private categoriesService: CategoriesService,
     @InjectRepository(Product) private productRepo: Repository<Product>,
   ) {}
 
   async create(data: ProductDto) {
     try {
       const brand = await this.brandsService.findById(data.brandId);
+      const categories = await this.categoriesService.findByIds(
+        data.categoriesIds,
+      );
 
       const newProduct = this.productRepo.create(data);
       newProduct.brand = brand;
+      newProduct.categories = categories;
       await this.productRepo.save(newProduct);
       return newProduct;
     } catch (error) {
