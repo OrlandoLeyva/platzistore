@@ -47,9 +47,12 @@ export class ProductsService {
     }
   }
 
-  async findById(id: number): Promise<Product> {
+  async findById(id: number) {
     try {
-      const product = await this.productRepo.findOneBy({ id });
+      const product = await this.productRepo.findOne({
+        where: { id },
+        relations: ['categories', 'brand'],
+      });
       if (!product)
         throw new HttpException(
           responses.error(404, 'Product not found'),
