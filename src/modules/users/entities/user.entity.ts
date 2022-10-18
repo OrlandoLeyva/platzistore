@@ -30,10 +30,18 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: false, default: 'admin' })
   role: Role;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
+  })
   updatedAt: Date;
 
   @OneToOne(() => Customer, (customer) => customer.user)

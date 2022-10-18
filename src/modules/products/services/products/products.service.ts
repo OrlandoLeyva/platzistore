@@ -1,12 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/modules/database/services/database.service';
 import {
+  FilterOptions,
   ProductDto,
   UpdateProductDto,
 } from 'src/modules/products/DTOs/products.dto';
 import { responses } from 'src/utils/response.handler';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThanOrEqual, FindOptionsWhere } from 'typeorm';
 import { Product } from '../../entities/product.entity';
 import { BrandsService } from '../brands/brands.service';
 import { Category } from '../../entities/category.entity';
@@ -38,8 +39,19 @@ export class ProductsService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationOptions?: FilterOptions) {
     try {
+      if (paginationOptions) {
+        const { offset, limit, maxPrice } = paginationOptions;
+        const where: FindOptionsWhere<Product> = {};
+        if (maxPrice) where.price = LessThanOrEqual(maxPrice);
+        const products = await this.productRepo.find({
+          take: limit,
+          skip: offset,
+          where,
+        });
+        return products;
+      }
       const products = await this.productRepo.find();
       return products;
     } catch (error) {
@@ -51,7 +63,7 @@ export class ProductsService {
     try {
       const product = await this.productRepo.findOne({
         where: { id },
-        relations: ['categories', 'brand'],
+        relations: ['brand', 'categories'],
       });
       if (!product)
         throw new HttpException(
@@ -86,6 +98,20 @@ export class ProductsService {
     try {
       const product = await this.findById(id);
       this.productRepo.merge(product, changes);
+      await this.productRepo.save(product);
+      return product;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeCategory(productId: number, categoryId: number) {
+    try {
+      const product = await this.findById(productId);
+      const categoryIndex = product.categories.findIndex(
+        (category) => category.id === categoryId,
+      );
+      product.categories.splice(categoryIndex, 1);
       await this.productRepo.save(product);
       return product;
     } catch (error) {

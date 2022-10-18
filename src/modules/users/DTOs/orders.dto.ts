@@ -1,4 +1,5 @@
 import {
+  ArrayNotEmpty,
   IsArray,
   IsInt,
   IsNotEmpty,
@@ -6,18 +7,22 @@ import {
   IsPositive,
 } from 'class-validator';
 
-import { PartialType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
+import { Purchase } from 'src/interfaces/purchase.interface';
 
-export class CreateOrderDto {
+export class OrderDto {
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   @IsInt()
-  userId: number;
+  customerId: number;
 
   @IsNotEmpty()
   @IsArray()
-  productsId: number[];
+  @ArrayNotEmpty()
+  products: Purchase[];
 }
 
-export class UpdateOrderDto extends PartialType(CreateOrderDto) {}
+export class createOrderDto extends OmitType(OrderDto, ['products']) {}
+
+export class UpdateOrderDto extends PartialType(OrderDto) {}

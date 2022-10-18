@@ -12,8 +12,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import {
+  FilterOptions,
   ProductDto,
   UpdateProductDto,
 } from 'src/modules/products/DTOs/products.dto';
@@ -22,6 +24,11 @@ import { ProductsService } from 'src/modules/products/services/products/products
 import { responses } from 'src/utils/response.handler';
 import { ParseIntPipe } from 'src/common/parse-int.pipe';
 import { ApiTags, ApiParam, ApiOperation } from '@nestjs/swagger';
+
+export interface PaginationOptions {
+  offset: number | undefined;
+  limit: number | undefined;
+}
 
 @ApiTags('products')
 @Controller('products')
@@ -40,9 +47,13 @@ export class ProductsController {
   }
 
   @Get()
-  async getAll() {
+  async getAll(
+    // @Query('limit', ParseIntPipe) limit = 100,
+    // @Query('offset', ParseIntPipe) offset = 0,
+    @Query() query: FilterOptions,
+  ) {
     try {
-      const products = await this.productsService.findAll();
+      const products = await this.productsService.findAll(query);
       return responses.success(200, 'OK', products);
     } catch (error) {
       throw error;
@@ -81,6 +92,19 @@ export class ProductsController {
     try {
       await this.productsService.remove(productId);
       return responses.success(200, 'OK', null);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Delete('/:productId/categories/:categoryId')
+  async deleteCategory(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    try {
+      await this.productsService.removeCategory(productId, categoryId);
+      return responses.success(204, 'Deleted successfully', null);
     } catch (error) {
       throw error;
     }
