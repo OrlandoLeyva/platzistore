@@ -26,7 +26,7 @@ export class OrderProduct {
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'updated_at',
   })
   updateAt: Date;
 
